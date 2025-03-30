@@ -18,9 +18,19 @@ const getMembersByGroup = async (group_id) => {
     const members = await groupMemberRepository.getMembersByGroup(group_id);
     return { success: true, data: members };
 };
+const getUserGroups = async (user_id) => {
+    const memberships = await groupMemberRepository.getUserGroups(user_id);
+    return memberships.map((m) => ({
+      group_id: m.group.group_id,
+      group_name: m.group.group_name,
+      created_by: m.group.created_by,
+      joined_at: m.joined_at
+    }));
+  };
 
 module.exports = {
     addMember,
     removeMember,
     getMembersByGroup,
+    getUserGroups
 };

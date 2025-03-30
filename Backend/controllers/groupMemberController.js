@@ -32,9 +32,21 @@ const getMembersByGroup = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+const getUserGroups = async (req, res) => {
+    try {
+      const userId = req.user.user_id;
+      const groups = await groupMemberService.getUserGroups(userId);
+      res.status(200).json({ success: true, data: groups });
+    } catch (error) {
+      console.error('Fetch user groups error:', error.message);
+      res.status(500).json({ success: false, message: 'Failed to fetch user groups' });
+    }
+  };
+  
 
 module.exports = {
     addMember,
     removeMember,
     getMembersByGroup,
+    getUserGroups
 };

@@ -22,8 +22,13 @@ const markMessageAsRead = async (message_id) => {
   return await messageRepository.markMessageAsRead(message_id);
 };
 
+const getConversationsForUser = async (user_id) => {
+  return await messageRepository.getConversationsForUser(user_id);
+};
+
 module.exports = {
   sendMessage,
   getMessagesBetweenUsers,
   markMessageAsRead,
+  getConversationsForUser
 };

@@ -15,4 +15,8 @@ router.get('/:userId', messageController.getMessagesBetweenUsers);
 // 📥 Mesajı okundu olarak işaretleme
 router.patch('/read/:messageId', messageController.markMessageAsRead);
 
+// Sohbeti olan kişileri getir
+router.get('/conversations', messageController.getConversations);
+
+
 module.exports = router;
