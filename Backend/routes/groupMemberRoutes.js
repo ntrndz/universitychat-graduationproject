@@ -8,5 +8,6 @@ router.use(authMiddleware);
 router.post('/add', groupMemberController.addMember);
 router.post('/remove', groupMemberController.removeMember);
 router.get('/:groupId/members', groupMemberController.getMembersByGroup);
+router.get('/my-groups', groupMemberController.getUserGroups);
 
 module.exports = router;

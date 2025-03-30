@@ -47,9 +47,20 @@ const markMessageAsRead = async (req, res) => {
     res.status(500).json({ success: false, message: 'İşlem sırasında hata oluştu.' });
   }
 };
+const getConversations = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+    const conversations = await messageService.getConversationsForUser(userId);
+    res.status(200).json({ success: true, data: conversations });
+  } catch (error) {
+    console.error('Conversations fetch error:', error.message);
+    res.status(500).json({ success: false, message: 'Failed to fetch conversations' });
+  }
+};
 
 module.exports = {
   sendMessage,
   getMessagesBetweenUsers,
   markMessageAsRead,
+  getConversations
 };
