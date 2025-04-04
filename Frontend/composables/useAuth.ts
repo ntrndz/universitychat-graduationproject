@@ -14,14 +14,13 @@ export const useAuth = () => {
       body: { email, password },
     })
 
-    // Access token'ı sessionStorage'a kaydet
     accessToken.value = res.accessToken
     sessionStorage.setItem('accessToken', res.accessToken)
 
     return res
   }
 
-  // Register işlemi
+  // Register işlemi (artık token kaydetmiyor)
   const register = async (email: string, password: string, firstName: string, lastName: string) => {
     const config = useRuntimeConfig()
 
@@ -30,14 +29,10 @@ export const useAuth = () => {
       body: { email, password, firstName, lastName },
     })
 
-    // Access token'ı sessionStorage'a kaydet
-    accessToken.value = res.accessToken
-    sessionStorage.setItem('accessToken', res.accessToken)
-
+    // Token kaydetmiyoruz, sadece başarılı kayıt kontrolü yapıyoruz
     return res
   }
 
-  // Logout işlemi
   const logout = async () => {
     const config = useRuntimeConfig()
 
@@ -52,7 +47,6 @@ export const useAuth = () => {
     sessionStorage.removeItem('accessToken')
   }
 
-  // Session'dan access token'ı geri yükle
   const restoreAccessTokenFromSession = () => {
     const token = sessionStorage.getItem('accessToken')
     if (token) {
@@ -60,7 +54,6 @@ export const useAuth = () => {
     }
   }
 
-  // Refresh token işlemi
   const refreshAccessToken = async () => {
     const config = useRuntimeConfig()
 
@@ -68,15 +61,13 @@ export const useAuth = () => {
       const res = await $fetch<{ accessToken: string }>(`${config.public.apiBase}/user/refresh-token`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken.value}`, // opsiyonel, backend ihtiyaç duyuyorsa
+          Authorization: `Bearer ${accessToken.value}`,
         },
       })
 
-      // Yeni access token'ı sessionStorage'a kaydet
       accessToken.value = res.accessToken
       sessionStorage.setItem('accessToken', res.accessToken)
       console.log('🔁 Access token yenilendi!')
-
       return true
     } catch (err) {
       console.error('❌ Refresh token başarısız:', err)

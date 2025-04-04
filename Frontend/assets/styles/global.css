@@ -1,0 +1,102 @@
+/* Dark mode arka plan rengi ve yazı rengi */
+body.dark {
+    background-color: #1e1e1e;  /* Koyu arka plan */
+    color: white;  /* Yazı rengini beyaz yap */
+}
+
+/* Input ve textarea alanlarında dark mode */
+body.dark input,
+body.dark textarea {
+    background-color: #333;  /* Koyu arka plan */
+    color: white;  /* Beyaz yazı rengi */
+}
+
+/* Sidebar (sol menü) dark mode */
+body.dark .sidebar {
+    background-color: #2a2a2a;  /* Koyu gri arka plan */
+    color: white;  /* Beyaz yazı rengi */
+}
+
+/* Chat window (sohbet penceresi) dark mode */
+body.dark .chat-window {
+    background-color: #181818;  /* Koyu siyah arka plan */
+    color: white;  /* Beyaz yazı rengi */
+}
+
+body.dark .menu-button {
+    font-size: 22px;
+    background-color: transparent;
+    color: rgb(226, 224, 224);
+    border: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+  
+/* Dark Mode için Dropdown Menü */
+body.dark .dropdown-menu {
+    background-color: #2b2b2b;  /* Koyu gri arka plan */
+    color: white;  /* Beyaz yazı rengi */
+}
+
+/* Normal temada Dropdown Menü */
+body .dropdown-menu {
+    background-color: #ffffff;  /* Beyaz arka plan */
+    color: black;  /* Siyah yazı rengi */
+}
+
+body.dark .dropdown-menu ul li:hover {
+    background-color: #504f4f67;
+  }
+  
+
+body.dark .chat-item:hover {
+    background-color: #504f4f67;
+  }
+
+  body.dark .chat-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+/* Mesajların yazı rengini gri yap */
+body.dark .chat-message {
+    color: #a5a5a5;  /* Açık gri renk */
+}
+
+/* Footer (alt alan) için dark mode */
+body.dark footer {
+    background-color: #1a1a1a;  /* Koyu gri arka plan */
+    color: #ccc;  /* Açık gri yazı rengi */
+    border-top: 1px solid #444;  /* Üst kenar rengi koyulaştırıldı */
+}
+
+/* Normal footer (açık tema için) */
+.footer1 {
+    background-color: #f9f9f9;  /* Açık gri arka plan */
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;  /* Üst kenar rengi */
+    font-size: 14px;
+    color: #666;  /* Koyu gri yazı rengi */
+}
+
+/* Mesaj yazma alanı (input) dark mode */
+body.dark input[type="text"],
+body.dark textarea {
+    background-color: #2a2a2a;  /* Koyu gri arka plan */
+    color: white;  /* Beyaz yazı rengi */
+    border: 1px solid #444;  /* Kenar rengi */
+}
+
+/* Gönder butonu (isteğe bağlı) dark mode */
+body.dark button {
+    background-color: #0a84ff;  /* Mavi buton arka planı */
+    color: white;  /* Beyaz yazı rengi */
+}
+
+/* Eğer özel bir mesaj input wrapper'ı varsa, onun için de stil */
+body.dark .message-input {
+    background-color: #1f1f1f;  /* Koyu arka plan */
+}

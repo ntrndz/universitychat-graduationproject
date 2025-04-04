@@ -3,6 +3,8 @@
 
 export default defineNuxtConfig({
 
+  css: ['@/assets/styles/global.css'],
+
   plugins: ['~/plugins/fetch.ts'],
 
   devServer: {

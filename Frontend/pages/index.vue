@@ -15,6 +15,7 @@ export default defineComponent({
     SignUpLogin,  // Componenti index.vue içinde kullanıyoruz
   },
 });
+
 </script>
 
 <style scoped>

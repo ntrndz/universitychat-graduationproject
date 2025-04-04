@@ -156,10 +156,9 @@
           }
   
           try {
-            const res = await register(email.value, password1.value, ad.value, soyad.value);
-            sessionStorage.setItem('accessToken', res.accessToken); // Kayıt sonrası token'ı kaydet
-            alert("Kayıt başarılı!");
-            router.push('/chat');
+            await register(email.value, password1.value, ad.value, soyad.value);
+            alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+            router.push('/login'); // Artık /chat yerine /login'e yönlendiriyoruz
           } catch (err) {
             console.error("Kayıt error:", err);
             alert("Kayıt işlemi başarısız.");
