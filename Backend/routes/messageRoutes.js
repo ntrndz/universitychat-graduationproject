@@ -7,7 +7,7 @@ const {authMiddleware } = require('../middlewares/authMiddleware'); // Token do�
 router.use(authMiddleware);
 
 // 📥 Mesaj gönderme
-router.post('/send', messageController.sendMessage);
+router.post('/send/:receiver_id', messageController.sendMessage);
 
 // 📥 Kullanıcılar arası mesajları çekme
 router.get('/:userId', messageController.getMessagesBetweenUsers);

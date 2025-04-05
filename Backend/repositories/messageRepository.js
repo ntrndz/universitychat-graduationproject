@@ -58,11 +58,28 @@ const getConversationsForUser = async (userId) => {
 
   return Array.from(uniqueUsers.values());
 };
+const getMessageById = async (message_id) => {
+  return await Message.findByPk(message_id);
+};
+const checkUserInConversation = async (user_id, other_user_id) => {
+  const exists = await Message.findOne({
+    where: {
+      [Op.or]: [
+        { sender_id: user_id, receiver_id: other_user_id },
+        { sender_id: other_user_id, receiver_id: user_id }
+      ]
+    },
+  });
+
+  return !!exists; // mesaj varsa true döner
+};
 
 
 module.exports = {
   sendMessage,
   getMessagesBetweenUsers,
   markMessageAsRead,
-  getConversationsForUser
+  getConversationsForUser,
+  getMessageById,
+  checkUserInConversation
 };

@@ -11,6 +11,7 @@ const removeMember = async (group_id, user_id) => {
 const getMembersByGroup = async (group_id) => {
   return await GroupMember.findAll({ where: { group_id } });
 };
+
 const getUserGroups = async (user_id) => {
   return await GroupMember.findAll({
     where: { user_id },

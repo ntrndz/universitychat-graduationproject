@@ -15,14 +15,22 @@ const sendGroupMessage = async (req, res) => {
 
 const getMessagesByGroup = async (req, res) => {
     try {
-        const { groupId } = req.params;
-        const result = await groupMessageService.getMessagesByGroup(groupId);
-        res.status(200).json(result);
+      const { groupId } = req.params;
+      const userId = req.user.user_id;
+  
+      const isMember = await groupMemberService.isUserMemberOfGroup(groupId, userId);
+      if (!isMember) {
+        return res.status(403).json({ success: false, message: "Bu gruba erişim yetkiniz yok" });
+      }
+  
+      const result = await groupMessageService.getMessagesByGroup(groupId);
+      res.status(200).json(result);
     } catch (error) {
-        console.error("Fetch group messages error:", error.message);
-        res.status(400).json({ success: false, message: error.message });
+      console.error("Fetch group messages error:", error.message);
+      res.status(400).json({ success: false, message: error.message });
     }
-};
+  };
+  
 
 module.exports = {
     sendGroupMessage,

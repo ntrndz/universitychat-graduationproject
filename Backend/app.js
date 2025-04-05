@@ -12,7 +12,7 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const initializeWebSocket = require('./websocket/index'); // ✅ Socket io entegrasyonu
 const app = express();
 
-const cors = require('cors')
+
 app.use(cors({
   origin: 'http://localhost:3001', // frontend portun
   credentials: true

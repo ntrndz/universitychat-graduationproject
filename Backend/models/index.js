@@ -5,35 +5,51 @@ const Group = require('./groupModel');
 const GroupMember = require('./groupMemberModel');
 const GroupMessage = require('./groupMessageModel');
 
-// User -> Role (1:N)
-User.belongsTo(UserRole, { foreignKey: 'role_id' });
+// 🔸 User → UserRole (1:N)
+User.belongsTo(UserRole, { foreignKey: 'role_id', as: 'role' }); // 🔥 as: 'role' sayesinde include ile erişebilirsin
 UserRole.hasMany(User, { foreignKey: 'role_id' });
 
-// Messages (1:1 between users)
-User.hasMany(Message, { foreignKey: 'sender_id' });
-User.hasMany(Message, { foreignKey: 'receiver_id' });
-Message.belongsTo(User, { foreignKey: 'sender_id' });
-Message.belongsTo(User, { foreignKey: 'receiver_id' });
+// 🔸 User ↔ Message (Private Messages)
+User.hasMany(Message, { foreignKey: 'sender_id', as: 'sentMessages' });
+User.hasMany(Message, { foreignKey: 'receiver_id', as: 'receivedMessages' });
+Message.belongsTo(User, { foreignKey: 'sender_id', as: 'sender' });
+Message.belongsTo(User, { foreignKey: 'receiver_id', as: 'receiver' });
 
-// Groups (1:N)
-User.hasMany(Group, { foreignKey: 'created_by' });
-Group.belongsTo(User, { foreignKey: 'created_by' });
+// 🔸 User → Group (Oluşturduğu gruplar)
+User.hasMany(Group, { foreignKey: 'created_by', as: 'createdGroups' });
+Group.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
 
-// Group Members (N:N)
-Group.belongsToMany(User, { through: GroupMember, foreignKey: 'group_id' });
-User.belongsToMany(Group, { through: GroupMember, foreignKey: 'user_id' });
+// 🔸 User ↔ Group (Üyelik - N:N)
+User.belongsToMany(Group, {
+  through: GroupMember,
+  foreignKey: 'user_id',
+  otherKey: 'group_id',
+  as: 'memberGroups',
+});
+Group.belongsToMany(User, {
+  through: GroupMember,
+  foreignKey: 'group_id',
+  otherKey: 'user_id',
+  as: 'members',
+});
 
-// Group Messages (1:N)
-Group.hasMany(GroupMessage, { foreignKey: 'group_id' });
-GroupMessage.belongsTo(Group, { foreignKey: 'group_id' });
-User.hasMany(GroupMessage, { foreignKey: 'sender_id' });
-GroupMessage.belongsTo(User, { foreignKey: 'sender_id' });
+// 🔸 GroupMember → Group (N:1) (Join işlemleri için)
+GroupMember.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
+GroupMember.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+// 🔸 Group → GroupMessage (1:N)
+Group.hasMany(GroupMessage, { foreignKey: 'group_id', as: 'messages' });
+GroupMessage.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
+
+// 🔸 User → GroupMessage (Gönderici)
+User.hasMany(GroupMessage, { foreignKey: 'sender_id', as: 'sentGroupMessages' });
+GroupMessage.belongsTo(User, { foreignKey: 'sender_id', as: 'sender' });
 
 module.exports = {
-    User,
-    UserRole,
-    Message,
-    Group,
-    GroupMember,
-    GroupMessage,
+  User,
+  UserRole,
+  Message,
+  Group,
+  GroupMember,
+  GroupMessage,
 };
