@@ -41,6 +41,23 @@ const updateUserRefreshToken = async (user_id, refreshToken) => {
     );
 };
 
+//nehir ekledi search kısmı için
+
+const searchUsers = async (q) => {
+  return await User.findAll({
+    where: {
+      [Op.or]: [
+        { first_name: { [Op.iLike]: `%${q}%` } },
+        { last_name: { [Op.iLike]: `%${q}%` } },
+        { email: { [Op.iLike]: `%${q}%` } }
+      ]
+    },
+    attributes: ['user_id', 'first_name', 'last_name', 'email'],
+    limit: 10
+  });
+};
+
+
 module.exports = {
   findAllUsers,
   findUserByEmail,
@@ -48,5 +65,6 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  updateUserRefreshToken
+  updateUserRefreshToken,
+  searchUsers
 };
