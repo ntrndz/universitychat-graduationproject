@@ -128,22 +128,22 @@
         }
   
         if (!isSignUpForm) {
-          // Giriş işlemi
-          if (!password1.value) {
-            alert("Lütfen şifrenizi girin.");
-            return;
-          }
-  
           try {
             const res = await login(email.value.trim(), password1.value.trim());
-            sessionStorage.setItem('accessToken', res.accessToken); // SessionStorage'da token'ı tut
+            console.log('🔑 Giriş başarılı! Gelen veri:', res)
+
+            if (!res.accessToken) {
+              alert('Token alınamadı. Lütfen tekrar deneyin.');
+              return;
+            }
+
             alert("Giriş başarılı!");
             router.push('/chat');
           } catch (err) {
             console.error("Login error:", err);
             alert("Giriş başarısız. E-posta veya şifre hatalı olabilir.");
           }
-        } else {
+        }  else {
           // Kayıt işlemi
           if (!ad.value || !soyad.value || !email.value || !password1.value || !password2.value) {
             alert("Lütfen tüm alanları doldurun.");
@@ -183,6 +183,7 @@
     },
   });
   </script>
+
   <style scoped lang="scss">
   .sign-up {
     max-width: 500px;

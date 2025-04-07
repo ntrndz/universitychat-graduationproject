@@ -1,45 +1,101 @@
 <template>
-    <div class="sidebar">
-      <div class="search-box">
-        <input v-model="search" type="text" placeholder="Search" />
-        <UserMenu />
-      </div>
-  
-      <ul class="chat-list">
-        <li v-for="chat in filteredChats" :key="chat.id" class="chat-item">
-          <div class="chat-left">
-            <div class="avatar">{{ chat.name.charAt(0).toUpperCase() }}</div>
-            <div class="chat-info">
-              <div class="chat-name">{{ chat.name }}</div>
-              <div class="chat-message">{{ chat.lastMessage }}</div>
-            </div>
-          </div>
-          <div class="chat-right">
-            <div class="chat-time">{{ chat.time }}</div>
-            <div v-if="chat.unreadCount > 0" class="chat-unread">{{ chat.unreadCount }}</div>
-          </div>
-        </li>
-      </ul>
+  <div class="sidebar">
+    <div class="search-box">
+      <input v-model="search" type="text" placeholder="Search" />
+      <UserMenu />
     </div>
-  </template>
-  
-  <script setup>
-    import { ref, computed } from 'vue'
-    import UserMenu from '@/components/userMenu.vue'
 
-  const search = ref('')
-  
-  const chats = ref([
-    { id: 1, name: 'Efe', lastMessage: 'Cuma borsa nasıl kapattı?', time: 'Thu', unreadCount: 4 },
-    { id: 2, name: 'Merve', lastMessage: '#SONDAKİKA 📢 yeni sınav duyurusu...', time: 'Thu', unreadCount: 25 },
-    { id: 3, name: 'Telegram Not Kanalı', lastMessage: '📚 Notlar yüklendi', time: 'Thu', unreadCount: 286 },
-    { id: 4, name: 'Barış', lastMessage: 'Hocam teşekkür ederim', time: 'Mon', unreadCount: 0 },
-  ])
-  
-  const filteredChats = computed(() =>
-    chats.value.filter(chat => chat.name.toLowerCase().includes(search.value.toLowerCase()))
-  )
-  </script>
+    <ul class="chat-list">
+      <li
+        v-for="chat in chats"
+        :key="chat.id"
+        class="chat-item"
+        :class="{ active: chat.id === selectedChatId }"
+        @click="$emit('selectChat', chat)"
+      >
+        <div class="chat-left">
+          <div class="avatar">{{ chat.name.charAt(0).toUpperCase() }}</div>
+          <div class="chat-info">
+            <div class="chat-name">{{ chat.name }}</div>
+            <div class="chat-message text-sm text-gray-500">{{ chat.email }}</div>
+          </div>
+        </div>
+      </li>
+       <!-- ✅ Arama sonucu yoksa gösterilecek mesaj -->
+  <li v-if="chats.length === 0 && search" class="px-4 py-2 text-sm text-gray-400">
+    Kullanıcı bulunamadı
+  </li>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import axios from 'axios'
+import UserMenu from '@/components/UserMenu.vue'
+import { useAuth } from '@/composables/useAuth'
+
+
+const { accessToken, restoreAccessTokenFromSession } = useAuth()
+
+// 🟡 Yeni ref: hazır mı kontrolü
+const isClientReady = ref(false)
+
+onMounted(() => {
+  restoreAccessTokenFromSession()
+  console.log('🔐 Token (geri yüklendi):', accessToken.value)
+  isClientReady.value = true // ✅ sadece client yüklendiğinde arama başlasın
+})
+
+// arama kutusu değeri
+const search = ref('')
+
+// kullanıcı listesi
+const chats = ref([])
+
+defineProps({
+  selectedChatId: Number
+})
+
+
+
+// arama değiştikçe backend'den kullanıcıları çek
+watch([search, isClientReady], async ([newValue, ready]) => {
+  if (!ready || newValue.trim().length === 0) {
+    chats.value = []
+    return
+  }
+
+  try {
+  const res = await axios.get('http://localhost:3000/api/users/search', {
+    headers: {
+      Authorization: `Bearer ${accessToken.value}`
+    },
+    params: {
+      q: newValue
+    }
+  })
+
+  // 👇 Gelen kullanıcıları formatla
+  chats.value = res.data.map(user => ({
+    id: user.user_id,
+    name: `${user.first_name} ${user.last_name}`,
+    email: user.email
+  }))
+} 
+ catch (err) {
+    console.error('❌ Arama hatası:', err)
+  }
+})
+
+
+
+console.log('📦 TOKEN:', accessToken.value)
+
+
+
+</script>
+
   
   <style scoped>
   .sidebar {
@@ -87,6 +143,11 @@
     transition: background 0.2s ease;
     cursor: pointer;
   }
+
+  .chat-item.active {
+  background-color: #dceeff;
+}
+
   
   .chat-item:hover {
     background-color: #eeeeee;

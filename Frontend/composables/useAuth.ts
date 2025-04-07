@@ -9,7 +9,7 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     const config = useRuntimeConfig()
 
-    const res = await $fetch<LoginResponse>(`${config.public.apiBase}/user/login`, {
+    const res = await $fetch<LoginResponse>(`${config.public.apiBase}/users/login`, {
       method: 'POST',
       body: { email, password },
     })
@@ -24,7 +24,7 @@ export const useAuth = () => {
   const register = async (email: string, password: string, firstName: string, lastName: string) => {
     const config = useRuntimeConfig()
 
-    const res = await $fetch<RegisterResponse>(`${config.public.apiBase}/user/register`, {
+    const res = await $fetch<RegisterResponse>(`${config.public.apiBase}/users/register`, {
       method: 'POST',
       body: { email, password, firstName, lastName },
     })
@@ -36,7 +36,7 @@ export const useAuth = () => {
   const logout = async () => {
     const config = useRuntimeConfig()
 
-    await $fetch(`${config.public.apiBase}/user/logout`, {
+    await $fetch(`${config.public.apiBase}/users/logout`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken.value}`,
@@ -58,7 +58,7 @@ export const useAuth = () => {
     const config = useRuntimeConfig()
 
     try {
-      const res = await $fetch<{ accessToken: string }>(`${config.public.apiBase}/user/refresh-token`, {
+      const res = await $fetch<{ accessToken: string }>(`${config.public.apiBase}/users/refresh-token`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken.value}`,

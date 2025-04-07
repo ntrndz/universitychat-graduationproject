@@ -1,17 +1,29 @@
 <template>
   <div class="chat-page">
-    <ChatSidebar />
-    <div class="flex flex-col h-[calc(100vh-80px)]"> <!-- örnek header yüksekliğini düş -->
-      <ChatWindow />
+    <ChatSidebar 
+      @selectChat="handleSelectChat" 
+      :selectedChatId="selectedChat?.id"
+    />
+
+    <div class="flex flex-col h-[calc(100vh-80px)]">
+      <ChatWindow 
+        :selectedChat="selectedChat"
+      />
+    </div>
   </div>
-</div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import ChatSidebar from '@/components/ChatSidebar.vue'
 import ChatWindow from '@/components/ChatWindow.vue'
-</script>
 
+const selectedChat = ref(null)
+
+const handleSelectChat = (chat) => {
+  selectedChat.value = chat
+}
+</script>
 <style scoped>
 .chat-page {
   display: grid;
