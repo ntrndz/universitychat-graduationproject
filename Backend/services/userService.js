@@ -128,4 +128,10 @@ const deleteUser = async (user_id) => {
     return await userRepository.deleteUser(user_id);
 };
 
-module.exports = { register, login, logout, refreshAccessToken ,verifyUser,getAllUsers,getUserById,updateUser,deleteUser};
+// Kullanıcı arama
+const searchUsers = async (q) => {
+    if (!q) throw new Error('Arama terimi gerekli');
+    return await userRepository.searchUsers(q);
+  };
+
+module.exports = { register, login, logout, refreshAccessToken ,verifyUser,getAllUsers,getUserById,updateUser,deleteUser,searchUsers};

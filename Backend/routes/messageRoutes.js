@@ -9,7 +9,7 @@ router.use(authMiddleware);
 // 📥 Mesaj gönderme
 router.post('/send/:receiver_id', messageController.sendMessage);
 
-// 📥 Kullanıcılar arası mesajları çekme
+// 📥 Kullanıcılar arası mesajları çekme    Sağ ekranda   req.user ile jwtden gelen kullanıcı hesap içndeki kullanıcı req.body ile seçilen kişinin id si alınarak hedef hesap belirlenir.
 router.get('/:userId', messageController.getMessagesBetweenUsers);
 
 // 📥 Mesajı okundu olarak işaretleme

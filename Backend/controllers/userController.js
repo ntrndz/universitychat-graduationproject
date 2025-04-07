@@ -155,4 +155,19 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { register, login, refreshToken, logout,verify,getAllUsers,getUserById, updateUser,deleteUser};
+// Kullanıcı arama
+const searchUsers = async (req, res) => {
+    const { q } = req.query;
+  
+    try {
+      const results = await userService.searchUsers(q?.toString());
+      res.json(results);
+    } catch (error) {
+      console.error('Kullanıcı arama hatası:', error.message);
+      res.status(500).json({ message: 'Sunucu hatası' });
+    }
+  };
+  
+
+
+module.exports = { register, login, refreshToken, logout,verify,getAllUsers,getUserById, updateUser,deleteUser,searchUsers};
