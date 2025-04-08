@@ -1,8 +1,10 @@
 // routes/pollRoutes.js
 const express = require("express");
-const router = express.Router();
+
 const pollController = require("../controllers/pollController");
-const authMiddleware = require("../middlewares/authMiddleware");
+const {authMiddleware} = require("../middlewares/authMiddleware");
+const router = express.Router();
+console.log("PollController:", pollController);
 
 // 🟢 Auth gerekli tüm işlemler için
 router.post("/", authMiddleware, pollController.createPoll); // Anket oluştur

@@ -29,6 +29,10 @@ const Message = sequelize.define(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        updated_at :{
+            type:DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
     },
     {
         tableName: 'messages',
