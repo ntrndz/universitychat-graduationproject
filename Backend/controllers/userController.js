@@ -1,4 +1,5 @@
 const userService = require('../services/userService');
+const getClientIp = require('../utils/getClientIp');
 
 // Kullanıcı Kayıt (Register)
 const register = async (req, res) => {
@@ -26,7 +27,9 @@ const login = async (req, res) => {
     }
 
     try {
-        const response = await userService.login(email, password);
+        const ip = getClientIp(req); // ✅ IP alınıyor
+        const response = await userService.login(email, password, ip); // ✅ IP servise iletiliyor
+
         if (!response.success) {
             return res.status(400).json({ message: response.message });
         }
@@ -36,7 +39,7 @@ const login = async (req, res) => {
         console.error('Login Error:', error.message);
         res.status(500).json({ message: 'Login failed' });
     }
-};
+};;
 
 // Token Yenileme (Refresh Token)
 const refreshToken = async (req, res) => {
