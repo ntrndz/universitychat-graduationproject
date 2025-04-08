@@ -9,6 +9,7 @@ const groupRoutes = require("./routes/groupRoutes");
 const groupMemberRoutes = require("./routes/groupMemberRoutes");
 const groupMessageRoutes = require("./routes/groupMessageRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const pollRoutes = require('./routes/pollRoutes');
 const initializeWebSocket = require("./websocket/index"); // ✅ Socket io entegrasyonu
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/groups", groupRoutes);
 app.use("/api/group-members", groupMemberRoutes);
 app.use("/api/group-messages", groupMessageRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use('/api/polls', pollRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

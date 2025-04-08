@@ -4,9 +4,12 @@ const Message = require('./messageModel');
 const Group = require('./groupModel');
 const GroupMember = require('./groupMemberModel');
 const GroupMessage = require('./groupMessageModel');
+const Poll = require('./pollModel');
+const PollOption = require('./pollOptionModel');
+const PollResponse = require('./pollResponseModel');
 
 // 🔸 User → UserRole (1:N)
-User.belongsTo(UserRole, { foreignKey: 'role_id', as: 'role' }); // 🔥 as: 'role' sayesinde include ile erişebilirsin
+User.belongsTo(UserRole, { foreignKey: 'role_id', as: 'role' });
 UserRole.hasMany(User, { foreignKey: 'role_id' });
 
 // 🔸 User ↔ Message (Private Messages)
@@ -33,7 +36,7 @@ Group.belongsToMany(User, {
   as: 'members',
 });
 
-// 🔸 GroupMember → Group (N:1) (Join işlemleri için)
+// 🔸 GroupMember → Group/User
 GroupMember.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
 GroupMember.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
@@ -41,9 +44,31 @@ GroupMember.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Group.hasMany(GroupMessage, { foreignKey: 'group_id', as: 'messages' });
 GroupMessage.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
 
-// 🔸 User → GroupMessage (Gönderici)
+// 🔸 User → GroupMessage
 User.hasMany(GroupMessage, { foreignKey: 'sender_id', as: 'sentGroupMessages' });
 GroupMessage.belongsTo(User, { foreignKey: 'sender_id', as: 'sender' });
+
+
+// ✅ Anket İlişkileri
+// 🔸 Group → Poll (1:N)
+Group.hasMany(Poll, { foreignKey: 'group_id', as: 'polls' });
+Poll.belongsTo(Group, { foreignKey: 'group_id', as: 'group' });
+
+// 🔸 Poll → PollOption (1:N)
+Poll.hasMany(PollOption, { foreignKey: 'poll_id', as: 'options' });
+PollOption.belongsTo(Poll, { foreignKey: 'poll_id', as: 'poll' });
+
+// 🔸 Poll → PollResponse (1:N)
+Poll.hasMany(PollResponse, { foreignKey: 'poll_id', as: 'responses' });
+PollResponse.belongsTo(Poll, { foreignKey: 'poll_id', as: 'poll' });
+
+// 🔸 User → PollResponse (1:N)
+User.hasMany(PollResponse, { foreignKey: 'user_id', as: 'pollResponses' });
+PollResponse.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+// 🔸 PollOption → PollResponse (1:N)
+PollOption.hasMany(PollResponse, { foreignKey: 'option_id', as: 'responses' });
+PollResponse.belongsTo(PollOption, { foreignKey: 'option_id', as: 'option' });
 
 module.exports = {
   User,
@@ -52,4 +77,7 @@ module.exports = {
   Group,
   GroupMember,
   GroupMessage,
+  Poll,
+  PollOption,
+  PollResponse
 };
